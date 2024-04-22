@@ -1,0 +1,79 @@
+# Docker Compose file for the development environment
+version: '3.8'
+name: boilerplate-api
+
+services:
+  # Service for the boilerplate-api application
+  boilerplate-api:
+    image: boilerplate-api:1.0.0
+    container_name: boilerplate-api
+    restart: always
+    env_file:
+      - .env.dev
+    ports:
+      - '${API_PORT}:${API_PORT}'
+    depends_on:
+      - db
+    networks:
+      - traefik-proxy
+    build:
+      dockerfile: Dockerfile
+      target: production
+    entrypoint: 'npm run start:prod'
+    logging:
+      driver: json-file
+      options:
+        max-size: '500m'
+        max-file: '10'
+
+  # Service for the PostgreSQL database
+  db:
+    image: postgres:16.2-alpine3.19
+    container_name: db
+    restart: always
+    env_file:
+      - .env.dev
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      TZ: 'GMT'
+      PGTZ: 'GMT'
+    networks:
+      - traefik-proxy
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - '5432:5432'
+
+  # Service for the pgAdmin PostgreSQL management tool
+  pg-admin:
+    image: dpage/pgadmin4:8.4
+    container_name: pg-admin
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - traefik-proxy
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - '5050:80'
+
+# Networks for the services
+networks:
+  traefik-proxy:
+    name: traefik-proxy
+    driver: bridge
+    external: false
+
+# Volumes for the services
+volumes:
+  pgdata:
+    driver: local

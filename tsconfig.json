@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    /* ModuleResolution: */
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    /* Base Options: */
+    "target": "ES2022",
+    "baseUrl": "./src",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "allowSyntheticDefaultImports": true,
+    ///* Output: */
+    "outDir": "./dist",
+    "incremental": true,
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "useDefineForClassFields": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    ///* Prettify */
+    "pretty": true,
+    "newLine": "lf",
+    "removeComments": true,
+    "stripInternal": true,
+    /* Strictness */
+    "strict": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": false,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "exactOptionalPropertyTypes": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "strictPropertyInitialization": false,
+    "alwaysStrict": true,
+    "strictFunctionTypes": true,
+    /* Paths */
+    "paths": {
+      "@modules/*": ["./modules/*"],
+      "@lib/*": ["./lib/*"],
+      "@common/*": ["./common/*"]
+    },
+    "typeRoots": ["./node_modules/@types", "src/common/@types/typings"]
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts", "dist"]
+}
