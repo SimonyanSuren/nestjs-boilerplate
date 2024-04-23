@@ -39,39 +39,43 @@ export class SeedService implements OnModuleInit {
   }
 
   private async seedSuperAdmin(): Promise<void> {
-    const email = process.env.SUPER_ADMIN_USERNAME || 'support@bilerplate.com';
-    const password =
-      process.env.SUPER_ADMIN_PASSWORD ||
-      ((): never => {
-        throw new Error('SUPER_ADMIN_PASSWORD is not defined in environment.');
-      })();
-    const hashedPassword = await HelperService.hashPassword(password);
+    try {
+      const email = process.env.SUPER_ADMIN_USERNAME || 'support@bilerplate.com';
+      const password =
+        process.env.SUPER_ADMIN_PASSWORD ||
+        ((): never => {
+          throw new Error('SUPER_ADMIN_PASSWORD is not defined in environment.');
+        })();
+      const hashedPassword = await HelperService.hashPassword(password);
 
-    const users: Array<Omit<UserEntity, 'id'>> = [
-      {
-        email,
-        lastName: 'SmartSoft',
-        firstName: 'SmartSoft',
-        password: hashedPassword,
-        roleId: RoleEnum.SUPER_ADMIN,
-        dob: null,
-        phoneNumber: null,
-        creatorId: null,
-        isActive: true,
-        isEmailVerified: true,
-        deletedAt: null,
-        updatedAt: new Date(),
-        createdAt: new Date(),
-      },
-    ];
+      const users: Array<Omit<UserEntity, 'id'>> = [
+        {
+          email,
+          lastName: 'Super',
+          firstName: 'Admin',
+          password: hashedPassword,
+          roleId: RoleEnum.SUPER_ADMIN,
+          dob: null,
+          phoneNumber: null,
+          creatorId: null,
+          isActive: true,
+          isEmailVerified: true,
+          deletedAt: null,
+          updatedAt: new Date(),
+          createdAt: new Date(),
+        },
+      ];
 
-    const checkUserData = await this.entityManager.find(UserEntity, { where: { email } });
+      const checkUserData = await this.entityManager.find(UserEntity, { where: { email } });
 
-    if (checkUserData.length === 0) {
-      await this.entityManager.save(
-        UserEntity,
-        users.map((user) => this.entityManager.create(UserEntity, user)),
-      );
+      if (checkUserData.length === 0) {
+        await this.entityManager.save(
+          UserEntity,
+          users.map((user) => this.entityManager.create(UserEntity, user)),
+        );
+      }
+    } catch (error) {
+      this.logger.error(error);
     }
   }
 }
