@@ -9,11 +9,11 @@ import {
 /**
  * Base entity class that provides common fields and functionality for all entities.
  */
-export class CoreEntity {
+export abstract class CoreEntity {
   /**
    * The unique identifier for the entity.
    */
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn('identity', { generatedIdentity: 'BY DEFAULT' })
   public id: number;
 
   /**
