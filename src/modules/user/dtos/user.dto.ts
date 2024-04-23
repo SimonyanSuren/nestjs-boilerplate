@@ -21,7 +21,7 @@ export class UserDto {
 
   public creatorId: number | null;
 
-  //@Exclude({ toPlainOnly: true })
+  @Exclude({ toPlainOnly: true })
   public password: string;
 
   public isEmailVerified: boolean;
